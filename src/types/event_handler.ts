@@ -1,9 +1,6 @@
-import { Events } from "discord.js";
+import { Client, Events } from "discord.js";
 
-export type IEventArgs = [];
-
-export interface IEventHandler {
+export type IEventHandler = {
     event: Events,
-    eventArgs: IEventArgs,
-    handlerFactory: () => (args: IEventArgs) => Promise<void>
+    handlerFactory: (client: Client) => (... args) => Promise<void>
 }

@@ -14,12 +14,14 @@ export type ISelectMenuExecute = (interaction: AnySelectMenuInteraction, idArgs:
 export type ISelectMenu = {
     customId: String,
     execute: ISelectMenuExecute,
-    permissions: ICommandPermission
+    permissions: ICommandPermission,
+    selectMenu: (... args) => RoleSelectMenuBuilder | UserSelectMenuBuilder | StringSelectMenuBuilder | ChannelSelectMenuBuilder
 }
 
 export type IButtonExecute = (interaction: ButtonInteraction, idArgs: String[]) => Promise<void>;
 export type IButton = {
     customId: String,
     execute: IButtonExecute,
-    permissions: ICommandPermission
+    permissions: ICommandPermission,
+    button: (... args) => ButtonBuilder
 }

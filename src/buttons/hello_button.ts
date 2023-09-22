@@ -1,9 +1,18 @@
+import { ButtonBuilder, ButtonStyle } from "discord.js";
 import { IButton, ICommandPermission } from "../types/discord_interactions";
 
-const helloButton: IButton = {
-  customId: 'hello',
-  execute: async (interaction) => {
+const customId = 'hello'
 
+const helloButton: IButton = {
+  customId: customId,
+  execute: async (interaction, idArgs) => {
+    await interaction.reply({content:"You pressed a button!"});
   },
-  permissions: ICommandPermission.ALL
+  permissions: ICommandPermission.ALL,
+  button: () => {
+    return new ButtonBuilder()
+      .setCustomId(customId)
+      .setStyle(ButtonStyle.Primary)
+      .setLabel("Hello");
+  }
 }

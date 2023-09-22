@@ -15,7 +15,7 @@ export type ISelectMenu = {
     customId: String,
     execute: ISelectMenuExecute,
     permissions: ICommandPermission,
-    selectMenu: (... args) => RoleSelectMenuBuilder | UserSelectMenuBuilder | StringSelectMenuBuilder | ChannelSelectMenuBuilder
+    selectMenu: (... args: any[]) => RoleSelectMenuBuilder | UserSelectMenuBuilder | StringSelectMenuBuilder | ChannelSelectMenuBuilder
 }
 
 export type IButtonExecute = (interaction: ButtonInteraction, idArgs: String[]) => Promise<void>;
@@ -23,5 +23,5 @@ export type IButton = {
     customId: String,
     execute: IButtonExecute,
     permissions: ICommandPermission,
-    button: (... args) => ButtonBuilder
+    button: (... args: any[]) => ButtonBuilder
 }

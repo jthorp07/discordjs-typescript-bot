@@ -1,7 +1,19 @@
 # Discord.js v14.13.0 Typescript Bot Template
 
+## Contents
+- [Features](#toc-features)
+    - [Handlers](#toc-feature-handlers)
+    - [Adding a Database](#toc-feature-db)
+- [User Guide](#toc-user-guide)
+    - [Creating Commands](#toc-guide-command-create)
+    - [Environment Variables](#toc-guide-env)
+
+<a id="toc-features"></a>  
+
 ## Feature Rundown
 This template is intended to provide a significant amount of boilerplate code in order to allow users to hop right in to making features for their bot. A lot of inspiration has come from the official [Discord.js guide](https://discordjs.guide/#before-you-begin). This documentation will not, however, contain extensive information on how to use the Discord.js library.
+
+<a id="toc-feature-handlers"></a>  
 
 ### Built-in Handlers:
 This bot template comes with event handlers for the following Discord.js events with some duplicates to handle different callback types:
@@ -12,10 +24,16 @@ This bot template comes with event handlers for the following Discord.js events 
 - VoiceStateUpdate
 - ClientReady
 
+<a id="toc-feature-db"></a>  
+
 ### Adding a Database
 Due to the variety of database management systems available, I did not want to prescribe a specific database methodology for the project. It is possible that in the far future I may add some branches that contain database features, but for now users will have to add the database themselves if they want one.
 
+<a id="toc-user-guide"></a>  
+
 ## Usage Guide
+
+<a id="toc-guide-command-create"></a>
 
 ### Creating a Command
 Commands should be contained in a single file in the commands directory (`src/commands`). The bare minimum needed for a command to work in this template is a default export of the `ICommand` type:  
@@ -34,6 +52,8 @@ Commands should be contained in a single file in the commands directory (`src/co
         permissions: ICommandPermission.ALL
     }
 ```
+
+<a id="toc-guide-env"></a>
 
 ### Environment Variables
 There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it *cough cough*)

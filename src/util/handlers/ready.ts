@@ -1,15 +1,16 @@
-import { ActivityType, Client, Events } from "discord.js";
+import { ActivityType, Events } from "discord.js";
+import { IEventHandler } from "../../types/event_handler";
 
-function init(client: Client) {
-    //Do nothing
-    return;
+const onReadyEventHandler: IEventHandler = {
+    event: Events.ClientReady,
+    handlerFactory: (client) => {
+        return async () => {
+            client.user?.setActivity('over your Discord server!', {
+                type: ActivityType.Watching,
+            });
+            console.log('[Bot]: Ready')
+        }
+    },
 }
 
-function handlerFactory() {
-    return async (client: Client) => {
-        client.user?.setActivity("Discord", {type: ActivityType.Playing});
-        console.log("[Startup]: Finished");
-    }
-}
-
-const discordEvent = Events.ClientReady;
+export default onReadyEventHandler;

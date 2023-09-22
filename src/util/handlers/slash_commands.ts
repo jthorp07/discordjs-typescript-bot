@@ -2,6 +2,7 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { ChatInputCommandInteraction, Client, Collection, Events, Interaction } from "discord.js";
 import { ICommand } from "../../types/discord_interactions";
+import { IEventHandler } from "../../types/event_handler";
 
 function init(client: Client) {
 
@@ -9,7 +10,7 @@ function init(client: Client) {
 
     const slashCommands = new Collection<String, ICommand>();
     const commandFiles = readdirSync(join(__dirname, "../../commands")).filter(file => file.endsWith(".js"));
-    
+
     for (const file of commandFiles) {
 
         const cmd: ICommand = require(file) as ICommand;
@@ -21,33 +22,24 @@ function init(client: Client) {
             continue;
         }
 
-        
+
     };
 
     return slashCommands;
 }
 
-function handlerFactory(slashCommands: Collection<String, ICommand>) {
-
-    return async (interaction: Interaction) => {
-        if (!interaction.isChatInputCommand()) return
-        let cmdInteraction: ChatInputCommandInteraction = interaction;
-        let cmd: ICommand | undefined = slashCommands.get(cmdInteraction.id);
-        if (cmd === undefined) return;
-        await cmd.execute(cmdInteraction); 
-    } 
+const slashCommandEventHandler: IEventHandler = {
+    event: Events.InteractionCreate,
+    handlerFactory: (client: Client) => {
+        const slashCommands = init(client);
+        return async (interaction: Interaction) => {
+            if (!interaction.isChatInputCommand()) return
+            let cmdInteraction: ChatInputCommandInteraction = interaction;
+            let cmd: ICommand | undefined = slashCommands?.get(cmdInteraction.id);
+            if (cmd === undefined) return;
+            await cmd.execute(cmdInteraction);
+        }
+    }
 }
 
-const discordEvent = Events.InteractionCreate;
-
-export default { 
-    discordEvent,
-    init, 
-    handlerFactory 
-};
-
-export {
-    discordEvent,
-    init,
-    handlerFactory,
-}
+export default slashCommandEventHandler;

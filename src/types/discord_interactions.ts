@@ -1,4 +1,4 @@
-import { AnySelectMenuInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, RoleSelectMenuBuilder, SlashCommandBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js"
+import { AnySelectMenuInteraction, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, RoleSelectMenuBuilder, SlashCommandBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js"
 
 export enum ICommandPermission {
     ALL
@@ -10,9 +10,16 @@ export type ICommand = {
     permissions: ICommandPermission
 }
 
-export type ISelectMenuExecute = (interaction: AnySelectMenuInteraction) => Promise<void>
+export type ISelectMenuExecute = (interaction: AnySelectMenuInteraction, idArgs: String[]) => Promise<void>;
 export type ISelectMenu = {
-    data: RoleSelectMenuBuilder | UserSelectMenuBuilder | StringSelectMenuBuilder | ChannelSelectMenuBuilder,
+    customId: String,
     execute: ISelectMenuExecute,
+    permissions: ICommandPermission
+}
+
+export type IButtonExecute = (interaction: ButtonInteraction, idArgs: String[]) => Promise<void>;
+export type IButton = {
+    customId: String,
+    execute: IButtonExecute,
     permissions: ICommandPermission
 }

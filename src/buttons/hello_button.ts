@@ -3,7 +3,7 @@ import { IButton, ICommandPermission } from "../types/discord_interactions";
 
 const customId = 'hello'
 
-const helloButton: IButton = {
+const button: IButton = {
   customId: customId,
   execute: async (interaction, idArgs) => {
     await interaction.reply({content:"You pressed a button!"});
@@ -16,3 +16,5 @@ const helloButton: IButton = {
       .setLabel("Hello");
   }
 }
+
+export default button;

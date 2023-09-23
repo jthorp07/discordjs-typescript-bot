@@ -6,17 +6,18 @@ import { join } from "path"
 
 export const setEventHandlers = (client: Client) => {
 
-    if (!client.isReady()) return;
+    if (!client) return;
 
     const eventHandlers = new Collection<String, IEventHandler>();
-    const commandFiles = readdirSync(join(__dirname, "./handlers")).filter(file => file.endsWith(".js"));
+    const handlerFiles = readdirSync(join(__dirname, "handlers")).filter(file => file.endsWith(".js"));
 
-    for (const file of commandFiles) {
+    for (const file of handlerFiles) {
 
-        const handler: IEventHandler = require(file) as IEventHandler;
+        const handler = require(join(__dirname, `handlers/${file}`)).default as IEventHandler;
         const onEvent = handler.handlerFactory(client);
+        
         try {
-            console.log(`[Handlers]: Reading event handler for ${handler.event.toString()}`);
+            console.log(`[Handlers]: Reading event handler for ${handler.event}.`);
             client.on(handler.event.toString(), onEvent);
         } catch (error) {
             console.log(`[Handlers]: Error in file ${file}`);

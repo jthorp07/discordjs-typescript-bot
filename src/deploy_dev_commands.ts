@@ -2,6 +2,8 @@ import { REST, Routes } from "discord.js";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { exit } from "process";
+import { join } from "path";
+import { ICommand } from "./types/discord_interactions";
 
 config();
 const CLIENT = process.env.CLIENT;
@@ -9,31 +11,43 @@ const TOKEN = process.env.TOKEN;
 const DEV_SERVER = process.env.DEV_SERVER;
 
 if (!TOKEN) {
-	console.log('[Deploy]: Missing environment variable TOKEN');
+	console.log('[Deploy-Dev]: Missing environment variable TOKEN');
 	exit();
 }
 
 if (!CLIENT) {
-	console.log('[Deploy]: Missing environment variable CLIENT');
+	console.log('[Deploy-Dev]: Missing environment variable CLIENT');
 	exit();
 }
 
 if (!DEV_SERVER) {
-	console.log('[Deploy]: Missing environment variable DEV_SERVER');
+	console.log('[Deploy-Dev]: Missing environment variable DEV_SERVER');
 	exit();
 }
 
 const commands = [];
-const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = readdirSync(join(__dirname, './commands')).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	commands.push(command.data.toJSON());
+	try {
+		console.log(`[Deploy-Dev]: Attempting to read command from file ${file}`);
+		let path = join(__dirname, `./commands/${file}`);
+		const command = require(path) as { default: ICommand };
+		commands.push(command.default.data.toJSON());
+		console.log(`[Deploy-Dev]: Read command from file ${file}`);
+	} catch (err) {
+		console.log(`[Deploy-Dev]: Failed to read command from file ${file}`);
+	}
+}
+
+if (commands.length === 0) {
+	console.log('[Deploy-Dev]: No commands to deploy.');
+	exit(0);
 }
 
 const rest = new REST().setToken(TOKEN);
 
 // For Guild Commands (for now, all commands will be Guild scope in the test server)
 rest.put(Routes.applicationGuildCommands(CLIENT, DEV_SERVER), { body: commands })
-	.then(() => console.log('[Deploy]: Successfully registered application commands.'))
+	.then(() => console.log('[Deploy-Dev]: Successfully registered application commands to dev server.'))
 	.catch(console.error);

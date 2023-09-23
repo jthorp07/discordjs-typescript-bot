@@ -1,14 +1,10 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
-import { fork } from "child_process";
 import { exit } from "process";
 import { setEventHandlers } from "./util";
 
 config();
 const TOKEN = process.env.TOKEN;
-
-
-fork("./deploy-commands.js");
 
 // Holy crap that's a lot of intention :flushed:
 const intent_flags = [
@@ -26,8 +22,10 @@ const intent_flags = [
 ];
 
 var client = new Client({ intents: intent_flags });
-if (!client) exit(1);
-
+if (!client) {
+  console.log("[Startup]: Failed to instantiate client");
+  exit(1);
+}
 setEventHandlers(client);
 
 client.login(TOKEN);

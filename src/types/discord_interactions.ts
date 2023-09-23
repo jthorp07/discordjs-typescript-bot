@@ -1,4 +1,4 @@
-import { AnySelectMenuInteraction, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, RoleSelectMenuBuilder, SlashCommandBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js"
+import { AnySelectMenuInteraction, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, ModalBuilder, ModalSubmitInteraction, RoleSelectMenuBuilder, SlashCommandBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js"
 
 export enum ICommandPermission {
     ALL
@@ -24,4 +24,11 @@ export type IButton = {
     execute: IButtonExecute,
     permissions: ICommandPermission,
     button: (... args: any[]) => ButtonBuilder
+}
+
+export type IModalExecute = (interaction: ModalSubmitInteraction, idArgs: String[]) => Promise<void>;
+export type IModal = {
+    customId: String,
+    execute: IModalExecute,
+    modal: (... args: any[]) => ModalBuilder
 }

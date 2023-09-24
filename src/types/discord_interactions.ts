@@ -1,8 +1,10 @@
 import { AnySelectMenuInteraction, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, ModalBuilder, ModalSubmitInteraction, RoleSelectMenuBuilder, SlashCommandBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js"
 
 export enum ICommandPermission {
-    ALL
+    ALL,
+    SERVER_OWNER
 }
+
 export type ICommandExecute = (interaction: ChatInputCommandInteraction) => Promise<void>
 export type ICommand = {
     data: SlashCommandBuilder,

@@ -6,7 +6,7 @@ import { IEventHandler } from "../../types/event_handler";
 
 const slashCommandEventHandler: IEventHandler = {
     event: Events.InteractionCreate,
-    handlerFactory: () => {
+    handlerFactory: (client, permCheck) => {
         const slashCommands = new Collection<String, ICommand>();
         const commandFiles = readdirSync(join(__dirname, "../../commands")).filter(file => file.endsWith(".js"));
 
@@ -26,6 +26,13 @@ const slashCommandEventHandler: IEventHandler = {
             let cmdInteraction: ChatInputCommandInteraction = interaction;
             let cmd: ICommand | undefined = slashCommands?.get(cmdInteraction.commandName);
             if (cmd === undefined) return;
+            if (permCheck) {
+                let authenticated = await permCheck(cmd.permissions, interaction);
+                if (!authenticated) {
+                    await interaction.editReply({ content: "You do not have the right permissions to use this selectmenu!" });
+                    return;
+                }
+            }
             await cmd.execute(cmdInteraction);
         }
     }

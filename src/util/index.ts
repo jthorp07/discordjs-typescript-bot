@@ -1,10 +1,11 @@
-import { Client, Collection, Events } from "discord.js";
+import { Client, Collection, Interaction } from "discord.js";
 import { IEventHandler } from "../types/event_handler";
 import { readdirSync } from "fs";
 import { join } from "path"
+import { ICommandPermission } from "../types/discord_interactions";
 
 
-export const setEventHandlers = (client: Client) => {
+export const setEventHandlers = (client: Client, checkPerms?: (permissionLevel: ICommandPermission, interaction: Interaction) => Promise<boolean>) => {
 
     if (!client) return;
 
@@ -14,7 +15,7 @@ export const setEventHandlers = (client: Client) => {
     for (const file of handlerFiles) {
 
         const handler = require(join(__dirname, `handlers/${file}`)).default as IEventHandler;
-        const onEvent = handler.handlerFactory(client);
+        const onEvent = handler.handlerFactory(client, checkPerms);
         
         try {
             console.log(`[Handlers]: Reading event handler for ${handler.event}.`);

@@ -5,8 +5,10 @@
     - [Handlers](#toc-feature-handlers)
     - [Adding a Database](#toc-feature-db)
 - [User Guide](#toc-user-guide)
-    - [Creating Commands](#toc-guide-command-create)
     - [Environment Variables](#toc-guide-env)
+    - [Creating Commands](#toc-guide-command-create)
+    - [Custom Permissions](#toc-guide-perms)
+    
 
 <a id="toc-features"></a>  
 
@@ -32,6 +34,16 @@ Due to the variety of database management systems available, I did not want to p
 <a id="toc-user-guide"></a>  
 
 ## Usage Guide
+
+<a id="toc-guide-env"></a>
+
+### Environment Variables
+There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it *cough cough*)
+
+#### Needed Environment Variables:
+- TOKEN (the bot's token - can be found on the Discord Developer Portal)
+- CLIENT (the bot user's Discord ID)
+- DEV_SERVER (the server ID of the Discord server that `src/deploy-commands.ts` will register commands to by default)
 
 <a id="toc-guide-command-create"></a>
 
@@ -60,7 +72,9 @@ Commands should be contained in a single file in the commands directory (`src/co
     export default command;
 ```  
 
-#### Command Permissions
+<a id="toc-guide-perms"></a>
+
+### Command Permissions
 This template povides an optional custom permissions system. This can be enabled by setting the environment variable `USE_CUSTOM_PERMISSIONS=TRUE`. By default, the permissions system comes with two permission levels represented in the `ICommandPermission` enum: `ICommandPermission.ALL` and `ICommandPermission.SERVER_OWNER`. 
 
 To create or customize custom permissions, two changes need to be made. First, a value representing the new permission level needs to be added to the `ICommandPermission` enum located at `src/types/discord_interactions.ts`:  
@@ -90,13 +104,5 @@ export default permServerOwner;
 
 From here, the template should read in the new permission file on startup.
 
-<a id="toc-guide-env"></a>
 
-### Environment Variables
-There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it *cough cough*)
-
-#### Needed Environment Variables:
-- TOKEN (the bot's token - can be found on the Discord Developer Portal)
-- CLIENT (the bot user's Discord ID)
-- DEV_SERVER (the server ID of the Discord server that `src/deploy-commands.ts` will register commands to by default)
 

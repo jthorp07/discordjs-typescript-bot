@@ -41,17 +41,26 @@ Commands should be contained in a single file in the commands directory (`src/co
     import { SlashCommandBuilder } from "discord.js";
     import { ICommand, ICommandPermission } from "../types/discord_interactions";
 
-    const myCommand: ICommand = {
+    const command: ICommand = {
         data: new SlashCommandBuilder()
-            .setName("helloworld") // command name must be all lowercase
-            .setDescription("Says hello to the world"),
-        execute: async (interaction) {
-            // Command code here
-            await interaction.reply({content: "Hello World"});
+            .setName('hello')
+            .setDescription('Says hello')
+            .addStringOption(option => 
+                option.setName('stringoption')
+                .setDescription('A string option')
+                .setRequired(true)
+            ) as SlashCommandBuilder, // Adding an option changes the builder type to an option builder. It is safe to caste it back to SlashCommandBuilder.
+        execute: async (interaction) => {
+            let stringoption = interaction.options.getString('stringoption');
+            await interaction.reply({content: `\`\`\`Hello ${stringoption}\`\`\``});
         },
         permissions: ICommandPermission.ALL
     }
-```
+
+    export default command;
+```  
+
+#### Command Permissions
 
 <a id="toc-guide-env"></a>
 

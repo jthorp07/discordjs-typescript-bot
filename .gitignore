@@ -2,3 +2,4 @@ node_modules/
 tsconfig.json
 lib/
 test_script.js
+test.env

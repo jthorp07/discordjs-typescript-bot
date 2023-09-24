@@ -61,6 +61,34 @@ Commands should be contained in a single file in the commands directory (`src/co
 ```  
 
 #### Command Permissions
+This template povides an optional custom permissions system. This can be enabled by setting the environment variable `USE_CUSTOM_PERMISSIONS=TRUE`. By default, the permissions system comes with two permission levels represented in the `ICommandPermission` enum: `ICommandPermission.ALL` and `ICommandPermission.SERVER_OWNER`. 
+
+To create or customize custom permissions, two changes need to be made. First, a value representing the new permission level needs to be added to the `ICommandPermission` enum located at `src/types/discord_interactions.ts`:  
+```typescript
+export enum ICommandPermission {
+    ALL,
+    SERVER_OWNER,
+    MY_NEW_PERMISSION_LEVEL // add your value here
+}
+```
+
+Next, a new file should be created in `src/util/permissions/permission_levels` whose default export is of the type `IPermission` and uses the new permission value created in the `ICommandPermission` enum:
+```typescript
+import { ICommandPermission } from "../../../types/discord_interactions";
+import { IPermission } from "../permissions";
+
+const myNewPermission: IPermission = {
+    permLevel: ICommandPermission.MY_NEW_PERMISSION_LEVEL,
+    permCheck: async (interaction) => {
+        // Authenticate the interaction according to the new permission level
+        return !interaction.inGuild();
+    }
+}
+
+export default permServerOwner;
+```
+
+From here, the template should read in the new permission file on startup.
 
 <a id="toc-guide-env"></a>
 

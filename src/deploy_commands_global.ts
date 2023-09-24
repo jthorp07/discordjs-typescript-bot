@@ -20,7 +20,7 @@ if (!CLIENT) {
 }
 
 const commands = [];
-const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = readdirSync(join(__dirname, `./commands`)).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	try {

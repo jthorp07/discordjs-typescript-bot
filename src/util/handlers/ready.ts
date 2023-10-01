@@ -11,6 +11,7 @@ const onReadyEventHandler: IEventHandler = {
             console.log('[Bot]: Ready')
         }
     },
+    useHandler: true,
 }
 
 export default onReadyEventHandler;

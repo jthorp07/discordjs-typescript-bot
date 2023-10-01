@@ -10,6 +10,7 @@ function handlerFactory() {
 const voiceStateUpdateEventHandler: IEventHandler = {
     event: Events.VoiceStateUpdate,
     handlerFactory: handlerFactory,
+    useHandler: false,
 }
 
 export default voiceStateUpdateEventHandler;

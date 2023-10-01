@@ -48,6 +48,7 @@ const selectMenuEventHandler: IEventHandler = {
             await cmd.execute(cmdInteraction, []);
         }
     },
+    useHandler: true,
 }
 
 export default selectMenuEventHandler;

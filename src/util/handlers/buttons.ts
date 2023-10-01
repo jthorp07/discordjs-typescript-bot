@@ -47,7 +47,8 @@ const buttonEventHandler: IEventHandler = {
 
             await cmd.execute(interaction, idArgs);
         }
-    }
+    },
+    useHandler: true
 }
 
 export default buttonEventHandler;

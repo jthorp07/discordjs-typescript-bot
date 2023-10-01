@@ -14,10 +14,10 @@ export const setEventHandlers = (client: Client, checkPerms?: (permissionLevel: 
 
     for (const file of handlerFiles) {
 
-        const handler = require(join(__dirname, `handlers/${file}`)).default as IEventHandler;
-        const onEvent = handler.handlerFactory(client, checkPerms);
-        
         try {
+            const handler = require(join(__dirname, `./handlers/${file}`)).default as IEventHandler;
+            if (!handler.useHandler) continue;
+            const onEvent = handler.handlerFactory(client, checkPerms);
             console.log(`[Handlers]: Reading event handler for ${handler.event}.`);
             client.on(handler.event.toString(), onEvent);
         } catch (error) {

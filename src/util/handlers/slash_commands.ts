@@ -35,7 +35,8 @@ const slashCommandEventHandler: IEventHandler = {
             }
             await cmd.execute(cmdInteraction);
         }
-    }
+    },
+    useHandler: true,
 }
 
 export default slashCommandEventHandler;

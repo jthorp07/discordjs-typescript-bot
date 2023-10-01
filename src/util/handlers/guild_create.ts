@@ -9,4 +9,7 @@ const guildCreateEventHandler: IEventHandler = {
             return;
         }
     },
+    useHandler: false
 }
+
+export default guildCreateEventHandler;

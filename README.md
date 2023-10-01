@@ -33,7 +33,7 @@ Due to the variety of database management systems available, I did not want to p
 
 <a id="toc-user-guide"></a>  
 
-## Usage Guide
+## User Guide
 
 <a id="toc-guide-env"></a>
 
@@ -70,15 +70,48 @@ Commands should be contained in a single file in the commands directory (`src/co
     }
 
     export default command;
-```  
+```
+
+<a id="toc-guide-components"></a>
+
+### Using Buttons, SelectMenus, and Modals
+
+Buttons, SelectMenus, and Modals all have the same basic structure in this template, with the only differences being how they are built using Discord.js. To add a new custom component, start by going to the directory for that component and making a new file that default exports that component's type (`IButton`, `ISelectMenu`, `IModal`):
+
+```TypeScript
+import { ButtonBuilder, ButtonStyle } from "discord.js";
+import { IButton, ICommandPermission } from "../types/discord_interactions";
+
+const customId = 'hello'
+
+const button: IButton = {
+  customId: customId,
+  execute: async (interaction, idArgs) => {
+    await interaction.reply({content:"You pressed a button!"});
+  },
+  permissions: ICommandPermission.ALL,
+  button: () => {
+    return new ButtonBuilder()
+      .setCustomId(customId)
+      .setStyle(ButtonStyle.Primary)
+      .setLabel("Hello");
+  }
+}
+
+export default button;
+```
+
+The `button` property (or corresponsing property for other component types) can take in any amount of arguments as needed to build the component, and this property should be used to consistently construct the component wherever it is used in the bot.
+
+Components in this template are allowed to have arguments passed in and parsed out of their custom IDs. To add arguments to the custom ID of a component, set the ID as a string with the component's ID (to identify the function to use)
 
 <a id="toc-guide-perms"></a>
 
 ### Command Permissions
-This template povides an optional custom permissions system. This can be enabled by setting the environment variable `USE_CUSTOM_PERMISSIONS=TRUE`. By default, the permissions system comes with two permission levels represented in the `ICommandPermission` enum: `ICommandPermission.ALL` and `ICommandPermission.SERVER_OWNER`. 
+This template povides an optional custom permissions system. This can be enabled by setting the environment variable `USE_CUSTOM_PERMISSIONS=TRUE`. By default, the permissions system comes with two permission levels represented in the `ICommandPermission` enum: `ICommandPermission.ALL` (anyone can use) and `ICommandPermission.SERVER_OWNER` (server owner only). 
 
 To create or customize custom permissions, two changes need to be made. First, a value representing the new permission level needs to be added to the `ICommandPermission` enum located at `src/types/discord_interactions.ts`:  
-```typescript
+```TypeScript
 export enum ICommandPermission {
     ALL,
     SERVER_OWNER,

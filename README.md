@@ -25,6 +25,15 @@ This bot template comes with event handlers for the following Discord.js events 
     - ButtonInteraction
 - VoiceStateUpdate
 - ClientReady
+- GuildCreate
+
+However, it should be noted that only the `ClientReady` and various `InteractionCreate` handlers come with a meaningful implementation. To prevent bloating the bot with many unused handlers, each handler has a `useHandler` boolean field, which when set to true will result in the bot having that handler attached to it during initialization. 
+
+By default, only the handlers found in the following files are enabled: 
+- `util/handlers/ready.ts`
+- `util/handlers/select_menus.ts`
+- `util/handlers/buttons.ts`
+- `util/handlers/slash_commands.ts`
 
 <a id="toc-feature-db"></a>  
 

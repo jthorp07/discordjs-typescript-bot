@@ -1,0 +1,15 @@
+import { AutoModerationRule, Events } from "discord.js";
+import { IEventHandler } from "../../types/event_handler";
+
+const autoModerationRuleCreateEventHandler: IEventHandler = {
+    event: Events.AutoModerationRuleCreate,
+    handlerFactory(client, checkPerms) {
+        return async (rule: AutoModerationRule) => {
+            // TODO: Implement
+            return;
+        }
+    },
+    useHandler: false
+}
+
+export default autoModerationRuleCreateEventHandler;

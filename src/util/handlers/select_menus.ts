@@ -1,13 +1,13 @@
 import { readdirSync } from "fs";
 import { join } from "path";
-import { AnySelectMenuInteraction, Client, Collection, Events, Interaction } from "discord.js";
+import { AnySelectMenuInteraction, Collection, Events, Interaction } from "discord.js";
 import { ISelectMenu } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
 
 const selectMenuEventHandler: IEventHandler = {
     event: Events.InteractionCreate,
-    handlerFactory: (client, permCheck) => {
+    handlerFactory: (ignored, permCheck) => {
         const selectMenus = new Collection<String, ISelectMenu>();
         const commandFiles = readdirSync(join(__dirname, "../../selectmenus")).filter(file => file.endsWith(".js"));
 

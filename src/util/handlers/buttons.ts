@@ -1,13 +1,13 @@
 import { readdirSync } from "fs";
 import { join } from "path";
-import { Client, Collection, Events, Interaction } from "discord.js";
+import { Collection, Events, Interaction } from "discord.js";
 import { IButton } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
 const buttonEventHandler: IEventHandler = {
 
     event: Events.InteractionCreate,
-    handlerFactory: (client, permCheck) => {
+    handlerFactory: (ignored, permCheck) => {
 
         const buttons = new Collection<String, IButton>();
         const commandFiles = readdirSync(join(__dirname, "../../buttons")).filter(file => file.endsWith(".js"));

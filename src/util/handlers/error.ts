@@ -4,7 +4,7 @@ import { IEventHandler } from "../../types/event_handler";
 const errorEventHandler: IEventHandler = {
     event: Events.Error,
     handlerFactory(client, checkPerms) {
-        return async (error: Error) => {
+        return (error: Error) => {
             // TODO: Implement
             return;
         }

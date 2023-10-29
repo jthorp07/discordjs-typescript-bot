@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Events, Guild } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.GuildUpdate,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (oldGuild: Guild, newGuild: Guild) => {
             // TODO: Implement
             return;
         }

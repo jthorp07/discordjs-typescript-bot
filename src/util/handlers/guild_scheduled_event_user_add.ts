@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Events, GuildScheduledEvent, User } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.GuildScheduledEventUserAdd,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (event: GuildScheduledEvent, user: User) => {
             // TODO: Implement
             return;
         }

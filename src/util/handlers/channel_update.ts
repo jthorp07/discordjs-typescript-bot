@@ -1,7 +1,7 @@
 import { DMChannel, Events, GuildChannel } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const channelUpdateEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.ChannelUpdate,
     handlerFactory(client, checkPerms) {
         return async (oldChannel: GuildChannel | DMChannel, newChannel: GuildChannel | DMChannel) => {
@@ -12,4 +12,4 @@ const channelUpdateEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default channelUpdateEventHandler;
+export default eventHandler;

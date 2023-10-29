@@ -1,7 +1,7 @@
 import { Events } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const errorEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.Error,
     handlerFactory(client, checkPerms) {
         return (error: Error) => {
@@ -12,4 +12,4 @@ const errorEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default errorEventHandler;
+export default eventHandler;

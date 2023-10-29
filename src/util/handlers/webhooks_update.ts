@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Events, ForumChannel, NewsChannel, StageChannel, TextChannel, VoiceChannel } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.WebhooksUpdate,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (channel: TextChannel|NewsChannel|VoiceChannel|StageChannel|ForumChannel) => {
             // TODO: Implement
             return;
         }

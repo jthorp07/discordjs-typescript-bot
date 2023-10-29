@@ -1,7 +1,7 @@
 import { Events, Guild, GuildAuditLogsEntry } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const guildAuditLogEntryCreateEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.GuildAuditLogEntryCreate,
     handlerFactory(client, checkPerms) {
         return async (auditLogEntry: GuildAuditLogsEntry, guild: Guild) => {
@@ -12,4 +12,4 @@ const guildAuditLogEntryCreateEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default guildAuditLogEntryCreateEventHandler;
+export default eventHandler;

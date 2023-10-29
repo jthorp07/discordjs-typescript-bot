@@ -4,7 +4,7 @@ import { Collection, Events, Interaction } from "discord.js";
 import { IButton } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
-const buttonEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
 
     event: Events.InteractionCreate,
     handlerFactory: (ignored, permCheck) => {
@@ -51,4 +51,4 @@ const buttonEventHandler: IEventHandler = {
     useHandler: true
 }
 
-export default buttonEventHandler;
+export default eventHandler;

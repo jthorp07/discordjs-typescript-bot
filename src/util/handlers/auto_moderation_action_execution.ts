@@ -1,7 +1,7 @@
 import { AutoModerationActionExecution, Events } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const autoModerationActionExecutionEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.AutoModerationActionExecution,
     handlerFactory(client, checkPerms) {
         return async (actionExecution: AutoModerationActionExecution) => {
@@ -12,4 +12,4 @@ const autoModerationActionExecutionEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default autoModerationActionExecutionEventHandler;
+export default eventHandler;

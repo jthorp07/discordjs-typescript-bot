@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Collection, Events, Message, MessageReaction, Snowflake } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.MessageReactionRemoveAll,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (message: Message, reactions: Collection<string|Snowflake, MessageReaction>) => {
             // TODO: Implement
             return;
         }

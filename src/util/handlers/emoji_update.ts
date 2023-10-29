@@ -1,7 +1,7 @@
-import { Events, Guild, GuildEmoji } from "discord.js";
+import { Events, GuildEmoji } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const emojiUpdateEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.GuildEmojiUpdate,
     handlerFactory(client, checkPerms) {
         return async (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => {
@@ -12,4 +12,4 @@ const emojiUpdateEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default emojiUpdateEventHandler;
+export default eventHandler;

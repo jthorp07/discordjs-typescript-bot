@@ -34,5 +34,4 @@ let checkPerms;
 if (USE_CUSTOM_PERMS) checkPerms = initPerms();
 setEventHandlers(client, checkPerms);
 
-console.log(TOKEN);
 client.login(TOKEN);

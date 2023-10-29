@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Events, Role } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.GuildRoleDelete,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (role: Role) => {
             // TODO: Implement
             return;
         }

@@ -1,7 +1,7 @@
 import { AutoModerationRule, Events } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const autoModerationRuleDeleteEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.AutoModerationRuleDelete,
     handlerFactory(client, checkPerms) {
         return async (rule: AutoModerationRule) => {
@@ -12,4 +12,4 @@ const autoModerationRuleDeleteEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default autoModerationRuleDeleteEventHandler;
+export default eventHandler;

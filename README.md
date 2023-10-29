@@ -19,13 +19,82 @@ This template is intended to provide a significant amount of boilerplate code in
 
 ### Built-in Handlers:
 This bot template comes with event handlers for the following Discord.js events with some duplicates to handle different callback types:
-- InteractionCreate
+- InteractionCreate: (note there is also an empty generic InteractionCreate handler that is disabled by default)
     - ChatInputCommandInteraction
     - AnySelectMenuInteraction (user will need to further type check for specific SelectMenu types themselves as they see necessary)
     - ButtonInteraction
 - VoiceStateUpdate
 - ClientReady
 - GuildCreate
+- ApplicationCommandPermissionsUpdate
+- AutoModerationActionExecution
+- AutoModerationRuleCreate
+- AutoModerationRuleDelete
+- AutoModerationRuleUpdate
+- ChannelCreate
+- ChannelDelete
+- ChannelPinsUpdate
+- ChannelUpdate
+- Debug
+- EmojiCreate
+- EmojiDelete
+- EmojiUpdate
+- Error
+- GuildAuditLogEntryCreate
+- GuildAvailable
+- GuildBanAdd
+- GuildBanRemove
+- GuildCreate
+- GuildDelete
+- GuildIntegrationsUpdate
+- GuildMemberAdd
+- GuildMemberAvailable
+- GuildMemberRemove
+- GuildMembersChunk
+- GuildMemberUpdate
+- GuildScheduledEventCreate
+- GuildScheduledEventDelete
+- GuildScheduledEventUpdate
+- GuildScheduledEventUserAdd
+- GuildScheduledEventUserRemove
+- GuildUnavailable
+- GuildUpdate
+- InviteCreate
+- InviteDelete
+- MessageCreate
+- MessageDelete
+- MessageDeleteBulk
+- MessageReactionAdd
+- MessageReactionRemove
+- MessageReactionRemoveAll
+- MessageReactionRemoveEmoji
+- MessageUpdate
+- PresenceUpdate
+- RoleCreate
+- RoleDelete
+- RoleUpdate
+- ShardDisconnect
+- ShardError
+- ShardReady
+- ShardReconnecting
+- ShardResume
+- StageInstanceCreate
+- StageInstanceDelete
+- StageInstanceUpdate
+- StickerCreate
+- StickerDelete
+- StickerUpdate
+- ThreadCreate
+- ThreadDelete
+- ThreadListSync
+- ThreadMembersUpdate
+- ThreadMemberUpdate
+- ThreadUpdate
+- TypingStart
+- UserUpdate
+- VoiceStateUpdate
+- Warn
+- WebhooksUpdate
 
 However, it should be noted that only the `ClientReady` and various `InteractionCreate` handlers come with a meaningful implementation. To prevent bloating the bot with many unused handlers, each handler has a `useHandler` boolean field, which when set to true will result in the bot having that handler attached to it during initialization. 
 
@@ -112,7 +181,16 @@ export default button;
 
 The `button` property (or corresponsing property for other component types) can take in any amount of arguments as needed to build the component, and this property should be used to consistently construct the component wherever it is used in the bot.
 
-Components in this template are allowed to have arguments passed in and parsed out of their custom IDs. To add arguments to the custom ID of a component, set the ID as a string with the component's ID (to identify the function to use)
+Components in this template are allowed to have arguments passed in and parsed out of their custom IDs. To add arguments to the custom ID of a component, set the ID as a string with the component's ID (to identify the function to use), followed by the arguments all separated by colons.
+
+**idArgs example:**
+```typescript
+// to be put in {component}Builder().setCustomId()
+const customId = `${componentId}:${argOne}:${argTwo}` // .. etc.
+
+// to extract args in execute()
+const myArgOne = idArgs[1] // args start at index 1 - index 0 is the actual ID
+```
 
 <a id="toc-guide-perms"></a>
 

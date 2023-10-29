@@ -2,9 +2,9 @@ import { Events } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.ShardError,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (error: Error, shardId: number) => {
             // TODO: Implement
             return;
         }

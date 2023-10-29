@@ -1,7 +1,7 @@
 import { DMChannel, Events, GuildChannel } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const channelDeleteEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.ChannelDelete,
     handlerFactory(client, checkPerms) {
         return async (channel: GuildChannel | DMChannel) => {
@@ -12,4 +12,4 @@ const channelDeleteEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default channelDeleteEventHandler;
+export default eventHandler;

@@ -1,7 +1,7 @@
 import { Events, TextBasedChannel } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const channelPinsUpdateEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.ChannelPinsUpdate,
     handlerFactory(client, checkPerms) {
         return async (channel: TextBasedChannel, time: Date) => {
@@ -12,4 +12,4 @@ const channelPinsUpdateEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default channelPinsUpdateEventHandler;
+export default eventHandler;

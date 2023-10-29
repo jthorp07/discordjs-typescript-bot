@@ -1,10 +1,10 @@
-import { Events } from "discord.js";
+import { Events, User } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
 const eventHandler: IEventHandler = {
-    event: Events.Debug,
+    event: Events.UserUpdate,
     handlerFactory(client, checkPerms) {
-        return async (info: string) => {
+        return async (oldUser: User, newUser: User) => {
             // TODO: Implement
             return;
         }

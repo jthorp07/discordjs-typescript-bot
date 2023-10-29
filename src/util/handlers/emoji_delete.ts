@@ -1,7 +1,7 @@
 import { Events, GuildEmoji } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const emojiDeleteEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.GuildEmojiDelete,
     handlerFactory(client, checkPerms) {
         return async (emoji: GuildEmoji) => {
@@ -12,4 +12,4 @@ const emojiDeleteEventHandler: IEventHandler = {
     useHandler: false
 }
 
-export default emojiDeleteEventHandler;
+export default eventHandler;

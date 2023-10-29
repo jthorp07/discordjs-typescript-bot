@@ -5,7 +5,7 @@ import { ISelectMenu } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
 
-const selectMenuEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.InteractionCreate,
     handlerFactory: (ignored, permCheck) => {
         const selectMenus = new Collection<String, ISelectMenu>();
@@ -51,4 +51,4 @@ const selectMenuEventHandler: IEventHandler = {
     useHandler: true,
 }
 
-export default selectMenuEventHandler;
+export default eventHandler;

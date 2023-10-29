@@ -1,7 +1,7 @@
 import { ActivityType, Events } from "discord.js";
 import { IEventHandler } from "../../types/event_handler";
 
-const onReadyEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.ClientReady,
     handlerFactory: (client) => {
         return async () => {
@@ -14,4 +14,4 @@ const onReadyEventHandler: IEventHandler = {
     useHandler: true,
 }
 
-export default onReadyEventHandler;
+export default eventHandler;

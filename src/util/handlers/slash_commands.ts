@@ -4,7 +4,7 @@ import { ChatInputCommandInteraction, Collection, Events, Interaction } from "di
 import { ICommand } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
-const slashCommandEventHandler: IEventHandler = {
+const eventHandler: IEventHandler = {
     event: Events.InteractionCreate,
     handlerFactory: (client, permCheck) => {
         const slashCommands = new Collection<String, ICommand>();
@@ -39,4 +39,4 @@ const slashCommandEventHandler: IEventHandler = {
     useHandler: true,
 }
 
-export default slashCommandEventHandler;
+export default eventHandler;

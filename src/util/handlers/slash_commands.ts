@@ -4,13 +4,25 @@ import { ChatInputCommandInteraction, Collection, Events, Interaction } from "di
 import { ICommand } from "../../types/discord_interactions";
 import { IEventHandler } from "../../types/event_handler";
 
+const path = join(__dirname, '../../commands');
 const eventHandler: IEventHandler = {
     event: Events.InteractionCreate,
     handlerFactory: (client, permCheck) => {
         const slashCommands = new Collection<String, ICommand>();
-        const commandFiles = readdirSync(join(__dirname, "../../commands")).filter(file => file.endsWith(".js"));
+        const files = (() => {
+            try {
+                return readdirSync(path).filter(file => file.endsWith(".js"));
+            } catch (err) {
+                return [];
 
-        for (const file of commandFiles) {
+            }
+        }).call(this);
+        if (files.length == 0) return async (interaction: Interaction) => {
+            if (!interaction.isChatInputCommand()) return;
+            await interaction.reply({ content: `Something went wrong, and slash commands cannot be handled at the moment. Please report this to a staff member.` });
+        }
+
+        for (const file of files) {
 
             const cmd = require(join(__dirname, `../../commands/${file}`)).default as ICommand;
             try {

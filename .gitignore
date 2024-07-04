@@ -3,3 +3,5 @@ tsconfig.json
 lib/
 test_script.js
 .env.test
+.idea
+gui/discordbotgui/target/

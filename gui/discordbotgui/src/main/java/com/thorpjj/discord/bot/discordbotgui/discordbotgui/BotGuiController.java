@@ -4,9 +4,15 @@ import com.thorpjj.discord.bot.discordbotgui.discordbotgui.util.CrossPlatformUti
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class BotGuiController {
     @FXML
     private Label botStatusText;
+
+    private Process botProcess;
+    private Thread botProcessCallbackThread;
 
     /**
      * Creates a new process to run the bot, then creates a new thread
@@ -16,22 +22,25 @@ public class BotGuiController {
     @FXML
     protected void onRunBotClick() {
 
-        Thread t;
-        Process proc;
         try {
-            proc = CrossPlatformUtils.launchSystemProcess("npm run bot");
+            botProcess = CrossPlatformUtils.launchSystemProcess("npm run bot");
             botStatusText.setText("Bot running!");
-            t = new Thread(() -> {
+            botProcessCallbackThread = new Thread(() -> {
                 try {
-                    int exitCode = proc.waitFor();
-                    botStatusText.setText("Bot offline!");
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    CompletableFuture<Integer> exitCode = botProcess.onExit().thenApply(Process::exitValue);
+                    int code = exitCode.get();
+                    botStatusText.setText(String.format("Bot Offline! Ended %d", code));
+                } catch (InterruptedException | ExecutionException e) {
+                    botStatusText.setText(String.format("Bot Offline! Exception caught: %s", e.getClass().getSimpleName()));
                 }
             });
+            botProcessCallbackThread.start();
+            botProcessCallbackThread.join();
         } catch (Exception e) {
             System.err.println("Unable to start bot.");
             botStatusText.setText("Failed to launch bot!");
+            botProcess = null;
+            botProcessCallbackThread = null;
         }
 
     }

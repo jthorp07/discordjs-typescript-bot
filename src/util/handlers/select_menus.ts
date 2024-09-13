@@ -2,10 +2,10 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { AnySelectMenuInteraction, Collection, Events, Interaction } from "discord.js";
 import { ISelectMenu } from "../../types/discord_interactions";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
 const path = join(__dirname, '../../selectmenus')
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.InteractionCreate,
     handlerFactory: (ignored, permCheck) => {
         const selectMenus = new Collection<String, ISelectMenu>();

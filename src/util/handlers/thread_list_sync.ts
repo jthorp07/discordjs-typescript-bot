@@ -1,7 +1,7 @@
 import { Collection, Events, Guild, Snowflake, ThreadChannel } from "discord.js";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.ThreadListSync,
     handlerFactory(client, checkPerms) {
         return async (threads: Collection<Snowflake, ThreadChannel>, guild: Guild) => {

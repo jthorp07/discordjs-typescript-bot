@@ -1,4 +1,4 @@
-import { REST, Routes } from "discord.js";
+import { REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from "discord.js";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { exit } from "process";
@@ -19,7 +19,7 @@ if (!CLIENT) {
 	exit(1);
 }
 
-const commands = [];
+const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
 const commandFiles = readdirSync(join(__dirname, `./commands`)).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {

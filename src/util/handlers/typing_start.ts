@@ -1,7 +1,7 @@
 import { Events, Typing } from "discord.js";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.TypingStart,
     handlerFactory(client, checkPerms) {
         return async (typing: Typing) => {

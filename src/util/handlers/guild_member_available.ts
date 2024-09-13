@@ -1,7 +1,7 @@
 import { Events, GuildMember } from "discord.js";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.GuildMemberAvailable,
     handlerFactory(client, checkPerms) {
         return async (member: GuildMember) => {

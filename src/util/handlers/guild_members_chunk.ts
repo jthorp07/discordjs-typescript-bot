@@ -1,7 +1,7 @@
 import { Collection, Events, GatewayGuildMembersChunkDispatchData, Guild, GuildMember, Snowflake } from "discord.js";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.GuildMembersChunk,
     handlerFactory(client, checkPerms) {
         return async (members: Collection<Snowflake, GuildMember>, guild: Guild, chunk: GatewayGuildMembersChunkDispatchData) => {

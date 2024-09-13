@@ -8,10 +8,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class BotGuiApp extends Application {
 
     private static final int MINIMUM_MAJOR_NODE_VERSION = 20;
+    private static final int MINIMUM_MAJOR_DOTENVX_VERSION = 0;
+    private static final int MINIMUM_MINOR_DOTENVX_VERSION = 3;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -50,6 +54,48 @@ public class BotGuiApp extends Application {
             if (Integer.parseInt(cmdResults.stdIn[0].substring(1).split("\\.")[0]) < MINIMUM_MAJOR_NODE_VERSION) result = result | 1;
         } else if (cmdResults.stdErr.length == 1 && cmdResults.stdErr[0].toLowerCase().startsWith("node:")) {
             result = result | 2;
+        } else {
+            System.out.println("Node.js version is good");
+        }
+        return result;
+    }
+
+
+    /**
+     *
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    private int checkSystemDotenvxVersion() throws IOException, InterruptedException {
+
+        int result = 0;
+        SystemCommandResults cmdResults = CrossPlatformUtils.executeSystemCommand("dotenvx -V");
+
+        if (cmdResults.stdIn.length == 0 && cmdResults.stdErr.length == 0) {
+            System.err.println("System command 'dotenvx -V' yielded no output.");
+            result = result | 4;
+        } else if (cmdResults.stdIn.length <= 1) {
+            try {
+                List<Integer> versions = Arrays.stream(cmdResults.stdIn[0].split("\\.")).map(Integer::parseInt).toList();
+                if (versions.get(0) < MINIMUM_MAJOR_DOTENVX_VERSION) {
+                    result = result | 1;
+                    System.err.println("dotenvx is installed, but needs to be updated to run this application");
+                    return result;
+                } else if (versions.get(0) == MINIMUM_MAJOR_DOTENVX_VERSION && versions.get(1) < MINIMUM_MINOR_DOTENVX_VERSION) {
+                    result = result | 1;
+                    System.err.println("dotenvx is installed, but needs to be updated to run this application");
+                    return result;
+                } else {
+                    System.out.println("dotenvx version is good");
+                    return result;
+                }
+            } catch (NumberFormatException ignored) {
+                System.err.println("NumberFormatException encountered while parsing dotenvx version");
+                result = result | 4;
+            }
+        } else if (cmdResults.stdErr.length == 1 && cmdResults.stdErr[0].toLowerCase().startsWith("dotenvx:")) {
+            result = result | 2;
         }
         return result;
     }
@@ -57,6 +103,10 @@ public class BotGuiApp extends Application {
     private void preInit() {
         try {
             int result = checkSystemNodeVersion();
+            if (result != 0) {
+                System.exit(result);
+            }
+            result = checkSystemDotenvxVersion();
             if (result != 0) {
                 System.exit(result);
             }

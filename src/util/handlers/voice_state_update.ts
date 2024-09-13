@@ -1,7 +1,7 @@
 import { Client, Events, VoiceState } from "discord.js";
-import { IEventHandler } from "../../types/event_handler";
+import { IDiscordEventHandler } from "../../types/event_handler";
 
-const eventHandler: IEventHandler = {
+const eventHandler: IDiscordEventHandler = {
     event: Events.Warn,
     handlerFactory(client, checkPerms) {
         return async (oldState: VoiceState, newState: VoiceState) => {

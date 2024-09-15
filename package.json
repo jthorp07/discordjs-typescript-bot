@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bot": "node lib/main.js",
-    "deploy-dev": "node lib/deploy_dev_commands.js",
-    "deploy-global": "node lib/deploy_commands_global.js",
+    "bot-prod": "dotenvx run -f .env.prod -- node bot/main.js",
+    "bot-dev": "dotenvx run -f .env.dev -- node bot/main.js",
+    "deploy-dev": "dotenvx run -f .env.dev -- node bot/deploy_dev_commands.js",
+    "deploy-global": "dotenvx run -f .env.prod -- node bot/deploy_commands_global.js",
     "build": "rm -rf ./bot/ && tsc"
   },
   "keywords": [
@@ -21,9 +22,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.14.1",
     "child_process": "^1.0.2",
     "discord.js": "^14.13.0",
-    "discordjs-bot": "file:",
-    "dotenv": "^16.3.1"
+    "discordjs-bot": "file:"
   }
 }

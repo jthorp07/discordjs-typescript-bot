@@ -41,7 +41,6 @@ if (commands.length === 0) {
 
 const rest = new REST().setToken(TOKEN);
 
-// For Guild Commands (for now, all commands will be Guild scope in the test server)
 rest.put(Routes.applicationCommands(CLIENT), { body: commands })
 	.then(() => console.log('[Deploy]: Successfully registered application commands globally.'))
 	.catch(console.error);

@@ -2,6 +2,8 @@ import { exit } from "process";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { IStartupEvent } from "../../types/startup";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 // Dumb type annotation for boolean function
 type StartupEventRunner = (() => Promise<boolean>) | { runner: () => Promise<boolean>, onFail: () => Promise<boolean> };
@@ -25,12 +27,12 @@ class Startup {
     public addStartupEvent(eventName: string, critical: boolean, runner: () => Promise<boolean>, onFail?: () => Promise<boolean>) {
 
         if (this.status == "running" || this.status == "starting" || this.status == "started") {
-            console.log("Startup is already running , starting, or started.");
+            logger.log("Startup is already running , starting, or started.", LogTarget.Error, "Startup");
             return false;
         }
 
         if (this.startupCritEvents.has(eventName) || this.startupNoCritEvents.has(eventName)) {
-            console.log(`Event "${eventName}" already exists. Use updateStartEvent to override.`);
+            logger.log(`Event "${eventName}" already exists. Use updateStartEvent to override.`, LogTarget.Error, "Startup");
             return false;
         }
 
@@ -49,7 +51,7 @@ class Startup {
     public updateStartupEvent(eventName: string, critical: boolean, runner: () => Promise<boolean>) {
 
         if (this.status == "running" || this.status == "starting" || this.status == "started") {
-            console.log("Startup is already running , starting, or started.");
+            logger.log("Startup is already running , starting, or started.", LogTarget.Error, "Startup");
             return false;
         }
 
@@ -61,7 +63,7 @@ class Startup {
     public removeStartupEvent(eventName: string) {
 
         if (this.status == "running" || this.status == "starting" || this.status == "started") {
-            console.log("Startup is already running , starting, or started.");
+            logger.log("Startup is already running , starting, or started.", LogTarget.Error, "Startup");
             return false;
         }
 
@@ -76,13 +78,13 @@ class Startup {
             return true;
         }
 
-        console.log(`Event ${eventName} is not registered.`);
+        logger.log(`Event ${eventName} is not registered.`, LogTarget.Error, "Startup");
         return false;
     }
 
     public onReady(starter: () => void) {
         if (this.status == "running" || this.status == "starting" || this.status == "started") {
-            console.log("Startup is already running , starting, or started.");
+            logger.log("Startup is already running , starting, or started.", LogTarget.Error, "Startup");
             return false;
         }
 
@@ -98,7 +100,7 @@ class Startup {
     public async run() {
 
         if (this.status != "ready") {
-            console.log("Status is not ready. Unable to run.");
+            logger.log("Status is not ready. Unable to run.", LogTarget.Error, "Startup");
             return;
         }
         this.status = "running";
@@ -110,13 +112,13 @@ class Startup {
                     const result = await value.runner();
                     if (!result) {
                         await value.onFail();
-                        console.log(`[Startup]: Critical failure for event ${key}. Aborting startup.`);
+                        logger.log(`Critical failure for event ${key}. Aborting startup.`, LogTarget.Error, "Startup");
                     }
                     return result;
                 } else {
                     const result = await value();
                     if (!result) {
-                        console.log(`[Startup]: Critical failure for event ${key}. Aborting startup.`)
+                        logger.log(`Critical failure for event ${key}. Aborting startup.`, LogTarget.Error, "Startup")
                     }
                     return result;
                 }
@@ -131,12 +133,12 @@ class Startup {
                     const result = await value.runner();
                     if (!result) {
                         await value.onFail();
-                        console.log(`[Startup]: Failure for event ${key}. Some features may not be available without a restart.`);
+                        logger.log(`Failure for event ${key}. Some features may not be available without a restart.`, LogTarget.Warn, "Startup");
                     }
                 } else {
                     const result = await value();
                     if (!result) {
-                        console.log(`[Startup]: Failure for event ${key}. Some features may not be available without a restart.`)
+                        logger.log(`Failure for event ${key}. Some features may not be available without a restart.`, LogTarget.Warn, "Startup")
                     }
                 }
                 return true;
@@ -147,7 +149,7 @@ class Startup {
         const results = await Promise.all(runnables.map(runnable => runnable()));
         for (const result of results) {
             if (!result) {
-                console.log("[Startup]: One or more critical failures occured during startup. Aborting startup.");
+                logger.log("One or more critical failures occured during startup. Aborting startup.", LogTarget.Error, "Startup");
                 exit(1); //TODO: Replace with shutdown
             }
         }
@@ -162,13 +164,13 @@ function init() {
     const startupEventFiles = readdirSync(join(__dirname, `./startup_commands`)).filter(file => file.endsWith('.js'));
     for (const file of startupEventFiles) {
         try {
-            console.log(`[Startup]: Reading event from file ${file}`);
+            logger.log(`Reading event from file ${file}`, LogTarget.Info, "Startup");
             let path = join(__dirname, `./startup_events/${file}`);
             const event = (require(path)).default as IStartupEvent;
             instance.addStartupEvent(event.event, event.critical, event.runner, event.onFail);
-            console.log(`[Startup]: Added event from file ${file}`);
+            logger.log(`Added event from file ${file}`, LogTarget.Info, "Startup");
         } catch (err) {
-            console.log(`[Startup]: Failed to add event from file ${file}`);
+            logger.log(`Failed to add event from file ${file}`, LogTarget.Error, "Startup");
         }
     }
 

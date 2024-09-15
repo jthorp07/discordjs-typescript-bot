@@ -3,6 +3,8 @@ import { join } from "path";
 import { AnySelectMenuInteraction, Collection, Events, Interaction } from "discord.js";
 import { ISelectMenu } from "../../types/discord_interactions";
 import { IDiscordEventHandler } from "../../types/event_handler";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 const path = join(__dirname, '../../selectmenus')
 const eventHandler: IDiscordEventHandler = {
@@ -26,10 +28,10 @@ const eventHandler: IDiscordEventHandler = {
 
             const cmd = require(join(__dirname, `../../selectmenus/${file}`)) as { default: ISelectMenu };
             try {
-                console.log(`[Select Menus]: Reading select menu ${cmd.default.customId}`);
+                logger.log(`Reading select menu ${cmd.default.customId}`, LogTarget.Info, "SelectMenus");
                 selectMenus.set(cmd.default.customId, cmd.default)
             } catch (error) {
-                console.log(`[Select Menus]: Error in file ${file}`);
+                logger.log(`Error in file ${file}`, LogTarget.Error, "SelectMenus");
                 continue;
             }
         };
@@ -38,7 +40,7 @@ const eventHandler: IDiscordEventHandler = {
             let cmdInteraction: AnySelectMenuInteraction = interaction;
             let idArgs = cmdInteraction.customId.split(':');
             if (!idArgs || idArgs.length === 0) {
-                console.error(`[Error]: Select menu idArgs parsing error for ID ${cmdInteraction.customId}`);
+                logger.log(`Select menu idArgs parsing error for ID ${cmdInteraction.customId}`, LogTarget.Error, "SelectMenus");
                 return;
             }
             const cmd: ISelectMenu | undefined = selectMenus?.get(idArgs[0]);

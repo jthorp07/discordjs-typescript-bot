@@ -1,4 +1,6 @@
+import { LogTarget } from "../../../types/logging";
 import { IStartupEvent } from "../../../types/startup";
+import { instance as logger } from "../../logger/logger";
 
 const event: IStartupEvent = {
     event: "wait_five_seconds",
@@ -6,12 +8,12 @@ const event: IStartupEvent = {
     runner: async () => {
         return new Promise((resolve) => {
             setTimeout(() => {
-                console.log("waited 5 seconds!");
+                logger.log("waited 5 seconds!", LogTarget.Info, "Wait5Sec");
                 resolve(true);
             }, 5000);
         })
     },
-    useEvent: false,
+    useEvent: true,
 }
 
 export default event;

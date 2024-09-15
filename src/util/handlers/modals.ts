@@ -3,6 +3,8 @@ import { join } from "path";
 import { Collection, Events, Interaction } from "discord.js";
 import { IModal } from "../../types/discord_interactions";
 import { IDiscordEventHandler } from "../../types/event_handler";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 const path = join(__dirname, "../../modals")
 const eventHandler: IDiscordEventHandler = {
@@ -27,10 +29,10 @@ const eventHandler: IDiscordEventHandler = {
 
             const cmd = require(join(__dirname, `../../modals/${file}`)) as { default: IModal };
             try {
-                console.log(`[Modals]: Reading button ${cmd.default.customId}`);
+                logger.log(`Reading modal ${cmd.default.customId}`, LogTarget.Info, "Modals");
                 modals.set(cmd.default.customId, cmd.default)
             } catch (error) {
-                console.log(`[Modals]: Error in file ${file}`);
+                logger.log(`Error in file ${file}`, LogTarget.Error, "Modals");
                 continue;
             }
         };
@@ -38,7 +40,7 @@ const eventHandler: IDiscordEventHandler = {
             if (!interaction.isModalSubmit()) return
             let idArgs = interaction.customId.split(':');
             if (!idArgs || idArgs.length === 0) {
-                console.error(`[Error]: Button idArgs parsing error for ID ${interaction.customId}`);
+                logger.log(`Modal idArgs parsing error for ID ${interaction.customId}`, LogTarget.Error, "Modals");
                 return;
             }
             let cmd: IModal | undefined = modals?.get(idArgs[0]);

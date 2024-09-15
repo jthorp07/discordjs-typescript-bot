@@ -3,6 +3,8 @@ import { join } from "path";
 import { Collection, Events, Interaction } from "discord.js";
 import { IButton } from "../../types/discord_interactions";
 import { IDiscordEventHandler } from "../../types/event_handler";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 const path = join(__dirname, "../../buttons")
 const eventHandler: IDiscordEventHandler = {
@@ -27,10 +29,10 @@ const eventHandler: IDiscordEventHandler = {
 
             const cmd = require(join(__dirname, `../../buttons/${file}`)) as { default: IButton };
             try {
-                console.log(`[Buttons]: Reading button ${cmd.default.customId}`);
+                logger.log(`Reading button ${cmd.default.customId}`, LogTarget.Info, "Buttons");
                 buttons.set(cmd.default.customId, cmd.default)
             } catch (error) {
-                console.log(`[Buttons]: Error in file ${file}`);
+                logger.log(`Error in file ${file}`, LogTarget.Error, "Buttons");
                 continue;
             }
         };
@@ -38,7 +40,7 @@ const eventHandler: IDiscordEventHandler = {
             if (!interaction.isButton()) return
             let idArgs = interaction.customId.split(':');
             if (!idArgs || idArgs.length === 0) {
-                console.error(`[Error]: Button idArgs parsing error for ID ${interaction.customId}`);
+                logger.log(`Button idArgs parsing error for ID ${interaction.customId}`, LogTarget.Error, "Buttons");
                 return;
             }
             let cmd: IButton | undefined = buttons?.get(idArgs[0]);

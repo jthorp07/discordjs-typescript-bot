@@ -2,6 +2,8 @@ import { Collection, Interaction } from "discord.js";
 import { ICommandPermission } from "../../types/discord_interactions";
 import { join } from "path";
 import { readdirSync } from "fs";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 /**
  * Reads in permissions data from the permission_levels directory and returns a closure
@@ -11,13 +13,13 @@ import { readdirSync } from "fs";
  */
 export function initPerms(): PermChecker {
 
-    console.log("[Permissions]: Initializing permissions")
+    logger.log("Initializing permissions.", LogTarget.Info, "Permissions");
     const permMap = new Collection<ICommandPermission, PermLevelCheck>;
     const permsDirectory = "./permission_levels";
 
     const permFiles = readdirSync(join(__dirname, permsDirectory)).filter(file => file.endsWith(".js"));
     for (const file of permFiles) {
-        console.log(`[Permissions]: Reading file ${file}`);
+        logger.log(`Reading file ${file}`, LogTarget.Info, "Permissions");
         const perm = require(join(__dirname, `${permsDirectory}/${file}`)).default as IPermission;
         permMap.set(perm.permLevel, perm.permCheck);
     }

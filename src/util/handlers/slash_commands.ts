@@ -3,6 +3,8 @@ import { join } from "path";
 import { ChatInputCommandInteraction, Collection, Events, Interaction } from "discord.js";
 import { ICommand } from "../../types/discord_interactions";
 import { IDiscordEventHandler } from "../../types/event_handler";
+import { instance as logger } from "../logger/logger";
+import { LogTarget } from "../../types/logging";
 
 const path = join(__dirname, '../../commands');
 const eventHandler: IDiscordEventHandler = {
@@ -26,10 +28,10 @@ const eventHandler: IDiscordEventHandler = {
 
             const cmd = require(join(__dirname, `../../commands/${file}`)).default as ICommand;
             try {
-                console.log(`[Slash Commands]: Reading command ${cmd.data.name}`);
+                logger.log(`Reading command ${cmd.data.name}`, LogTarget.Info, "SlashCommands");
                 slashCommands.set(cmd.data.name, cmd)
             } catch (error) {
-                console.log(`[Slash Commands]: Error in file ${file}`);
+                logger.log(`Error in file ${file}`, LogTarget.Error, "SlashCommands");
                 continue;
             }
         };

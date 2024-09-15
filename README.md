@@ -3,12 +3,14 @@
 ## Contents
 - [Features](#toc-features)
     - [Handlers](#toc-feature-handlers)
+    - [Startup Guard](#toc-feature-startup)
     - [Adding a Database](#toc-feature-db)
 - [User Guide](#toc-user-guide)
     - [Environment Variables](#toc-guide-env)
     - [Creating Commands](#toc-guide-command-create)
+    - [Creating Message Components](#toc-guide-components)
     - [Custom Permissions](#toc-guide-perms)
-    
+    - [Adding Startup Tasks](#toc-guide-startup)
 
 <a id="toc-features"></a>  
 
@@ -18,91 +20,16 @@ This template is intended to provide a significant amount of boilerplate code in
 <a id="toc-feature-handlers"></a>  
 
 ### Built-in Handlers:
-This bot template comes with event handlers for the following Discord.js events with some duplicates to handle different callback types:
-- InteractionCreate: (note there is also an empty generic InteractionCreate handler that is disabled by default)
-    - ChatInputCommandInteraction
-    - AnySelectMenuInteraction (user will need to further type check for specific SelectMenu types themselves as they see necessary)
-    - ButtonInteraction
-- VoiceStateUpdate
-- ClientReady
-- GuildCreate
-- ApplicationCommandPermissionsUpdate
-- AutoModerationActionExecution
-- AutoModerationRuleCreate
-- AutoModerationRuleDelete
-- AutoModerationRuleUpdate
-- ChannelCreate
-- ChannelDelete
-- ChannelPinsUpdate
-- ChannelUpdate
-- Debug
-- EmojiCreate
-- EmojiDelete
-- EmojiUpdate
-- Error
-- GuildAuditLogEntryCreate
-- GuildAvailable
-- GuildBanAdd
-- GuildBanRemove
-- GuildCreate
-- GuildDelete
-- GuildIntegrationsUpdate
-- GuildMemberAdd
-- GuildMemberAvailable
-- GuildMemberRemove
-- GuildMembersChunk
-- GuildMemberUpdate
-- GuildScheduledEventCreate
-- GuildScheduledEventDelete
-- GuildScheduledEventUpdate
-- GuildScheduledEventUserAdd
-- GuildScheduledEventUserRemove
-- GuildUnavailable
-- GuildUpdate
-- InviteCreate
-- InviteDelete
-- MessageCreate
-- MessageDelete
-- MessageDeleteBulk
-- MessageReactionAdd
-- MessageReactionRemove
-- MessageReactionRemoveAll
-- MessageReactionRemoveEmoji
-- MessageUpdate
-- PresenceUpdate
-- RoleCreate
-- RoleDelete
-- RoleUpdate
-- ShardDisconnect
-- ShardError
-- ShardReady
-- ShardReconnecting
-- ShardResume
-- StageInstanceCreate
-- StageInstanceDelete
-- StageInstanceUpdate
-- StickerCreate
-- StickerDelete
-- StickerUpdate
-- ThreadCreate
-- ThreadDelete
-- ThreadListSync
-- ThreadMembersUpdate
-- ThreadMemberUpdate
-- ThreadUpdate
-- TypingStart
-- UserUpdate
-- VoiceStateUpdate
-- Warn
-- WebhooksUpdate
+This bot template comes with wrappers for event handlers for all of the Discord.js `Client` events. Most of these are empty and flagged to not be included at runtime with a few exceptions:
 
-However, it should be noted that only the `ClientReady` and various `InteractionCreate` handlers come with a meaningful implementation. To prevent bloating the bot with many unused handlers, each handler has a `useHandler` boolean field, which when set to true will result in the bot having that handler attached to it during initialization. 
+- `ClientReady` (src/util/handlers/ready.ts): Prints a message to the console indicating the bot has logged in and is ready to operate, then sets the bot's activity to a custom message
+- `InteractionCreate` (../../../slash_commands.ts, modals.ts, select_menus.ts, buttons.ts): Each of these handlers registers files from the respectively named directories at the root of the project to automatically read in commands and message component responses at startup. 
+    - **NOTE:** There is also an empty handler for this event at /.interaction_create.ts in case a custom handler is desirable for the event
 
-By default, only the handlers found in the following files are enabled: 
-- `util/handlers/ready.ts`
-- `util/handlers/select_menus.ts`
-- `util/handlers/buttons.ts`
-- `util/handlers/slash_commands.ts`
+<a id="toc-feature-startup"></a>
+
+### Startup Guard
+If one or more asyncronous tasks need to be completed before the bot becomes available on startup, this template provides a clean way to safely process those tasks before logging the bot in with an option to change the behavior of the bot or gracefully fail to start in the case of unexpected behavior from startup tasks.
 
 <a id="toc-feature-db"></a>  
 
@@ -116,7 +43,9 @@ Due to the variety of database management systems available, I did not want to p
 <a id="toc-guide-env"></a>
 
 ### Environment Variables
-There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it *cough cough*)
+There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it)
+
+Dotenvx .env injection (WIP): Work is being done to change the method of .env injection to use dotenvx- an extension of dotenv that allows scripts to easily inject variables from different .env sources
 
 #### Needed Environment Variables:
 - TOKEN (the bot's token - can be found on the Discord Developer Portal)
@@ -139,7 +68,7 @@ Commands should be contained in a single file in the commands directory (`src/co
                 option.setName('stringoption')
                 .setDescription('A string option')
                 .setRequired(true)
-            ) as SlashCommandBuilder, // Adding an option changes the builder type to an option builder. It is safe to caste it back to SlashCommandBuilder.
+            ) as SlashCommandBuilder, // Adding an option changes the builder type to an option builder. It is safe to cast it back to SlashCommandBuilder.
         execute: async (interaction) => {
             let stringoption = interaction.options.getString('stringoption');
             await interaction.reply({content: `\`\`\`Hello ${stringoption}\`\`\``});
@@ -224,5 +153,32 @@ export default permServerOwner;
 
 From here, the template should read in the new permission file on startup.
 
+<a id="toc-guide-startup"></a>
 
+### Adding Startup Tasks
 
+When working with multi-system applications, it might be desireable to delay logging in the bot until all of the services it depends on have been connected to. The startup module located at `src/util/bot_runner` provides an easy interface to drop startup tasks into. To create a startup task, create a file that default exports the `IStartupEvent` type from `src/types/startup.ts`:
+
+```typescript
+// src/util/bot_runner/startup_events/my_startup_task.ts
+import { IStartupEvent } from "../../../types/startup";
+import { getDatabase, getDatabaseDependentServices } from "~/path/to/database/implementation";
+
+const event: IStartupEvent = {
+    event: "connect_to_db", // identifier for the event
+    critical: false, // if true, bot will abort startup in the case of task failure
+    runner: async () => {
+        const db = await getDatabase();
+        return db ? true : false; // return true on success, false on fail
+    }, // this code will run before the bot logs in
+    onFail: async () => {
+        const services = await getDatabaseDependentServices();
+        for (const service of services) {
+            service.disable();
+        }
+    } // (optional) this code will run if the runner returns false
+    useEvent: true, // if true, this task will be run
+}
+
+export default event;
+```

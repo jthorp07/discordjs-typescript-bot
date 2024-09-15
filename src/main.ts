@@ -3,6 +3,8 @@ import { config } from "dotenv";
 import { exit } from "process";
 import { setEventHandlers } from "./util";
 import { initPerms } from "./util/permissions/permissions";
+import { instance as logger } from "./util/logger/logger";
+import { LogTarget } from "./types/logging";
 
 
 config();
@@ -26,7 +28,7 @@ const intent_flags = [
 
 var client = new Client({ intents: intent_flags });
 if (!client) {
-  console.log("[Startup]: Failed to instantiate client");
+  logger.log("Failed to instantiate client.", LogTarget.Error, "Bot");
   exit(1);
 }
 

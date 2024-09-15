@@ -3,7 +3,7 @@ export type LogRecipient = (message: string, target: string, system?: string) =>
 const FALLBACK_TARGET = "__FALLBACK__" as const;
 export type ILogTarget = {
     message: LogRecipient,
-    targets: LogTarget | typeof FALLBACK_TARGET[],
+    targets: (LogTarget | typeof FALLBACK_TARGET)[],
 }
 
 export enum LogTarget {

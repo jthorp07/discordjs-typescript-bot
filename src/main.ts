@@ -1,13 +1,10 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { config } from "dotenv";
 import { exit } from "process";
 import { setEventHandlers } from "./util";
 import { initPerms } from "./util/permissions/permissions";
 import { instance as logger } from "./util/logger/logger";
 import { LogTarget } from "./types/logging";
 
-
-config();
 const TOKEN = process.env.TOKEN || "NO_TOKEN_PROVIDED";
 const USE_CUSTOM_PERMS = process.env.USE_CUSTOM_PERMISSIONS === "TRUE" ? true : false;
 

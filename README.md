@@ -43,14 +43,18 @@ Due to the variety of database management systems available, I did not want to p
 <a id="toc-guide-env"></a>
 
 ### Environment Variables
-There is an included .env file in this repository. Users should supply their environment variables to that file or make a new .env file with the same format (and .gitignore it)
+There are 3 .env files by default in the repository: `.env.pub`, `.env.dev`, and `.env.prod`. These files contain keys for a development server for the bot, a flag to enable the custom permissions module, a production bot token, a development bot token, a production bot client id, and a development bot client id. The scripts in package.json will use dotenvx to inject some combination of .env files into the bot on launch to allow multiple environments to be configured.
 
-Dotenvx .env injection (WIP): Work is being done to change the method of .env injection to use dotenvx- an extension of dotenv that allows scripts to easily inject variables from different .env sources
-
-#### Needed Environment Variables:
-- TOKEN (the bot's token - can be found on the Discord Developer Portal)
-- CLIENT (the bot user's Discord ID)
-- DEV_SERVER (the server ID of the Discord server that `src/deploy-commands.ts` will register commands to by default)
+#### Important Environment Variables:
+- .env.pub
+    - `USE_CUSTOM_PERMS`: Set to TRUE to use the permissions module
+    - `DEV_SERVER`: Set to your development server's Discord ID to use the dev scripts to deploy only to the dev server
+- .env.prod
+    - `TOKEN`: The token to use when logging in to the production bot
+    - `CLIENT`: The Discord ID of the production bot's Discord user
+- .env.dev
+    - `TOKEN`: The token to use when logging in to the development bot
+    - `CLIENT`: The Discord ID of the development bot's Discord user
 
 <a id="toc-guide-command-create"></a>
 

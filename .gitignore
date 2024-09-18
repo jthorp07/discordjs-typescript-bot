@@ -1,5 +1,4 @@
 node_modules/
-tsconfig.json
 lib/
 test_script.js
 .env.test

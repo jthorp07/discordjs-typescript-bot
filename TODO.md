@@ -2,14 +2,9 @@
 
 ## Refactors
 
-- Remove dotenv, add dotenvx for script env injection
-- Change deploy scripts, main to reflect env injection
-- Update package scripts
+- Imports are probably broken across the repo. Fix them and extract them to const variables
 
 ## Additions
-
-- Startup module
-- Logger
 
 ## Testing
 

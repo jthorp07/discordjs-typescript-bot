@@ -1,11 +1,8 @@
-import { readdirSync } from "fs";
 import { join } from "path";
 import { IAsyncBotTask } from "../../adapter_types/async_bot_task";
 import { instance as logger } from "../logger/logger";
 import { LogTarget } from "../../adapter_types/logging";
-
-const STARTUP_EVENTS_DIR = "./startup_commands/" as const;
-const SHUTDOWN_EVENTS_DIR = "./shutdown_commands/" as const;
+import { readDirectoryThen } from "../../algorithms/io";
 
 /**
  * @type AsyncTask
@@ -86,22 +83,10 @@ class DiscordBotAsyncTaskManager {
     }
 }
 
-function createTaskManager(taskDir: string) {
+export function createTaskManager(taskDir: string) {
     const taskManager = new DiscordBotAsyncTaskManager();
-    const taskFiles = readdirSync(join(__dirname, taskDir)).filter(file => file.endsWith('.js'));
-    for (const file of taskFiles) {
-        try {
-            logger.log(`Reading event from file ${file}`, LogTarget.Info, "AsyncTaskManager");
-            const path = join(__dirname, `${taskDir}${file}`);
-            const task = (require(path)).default as IAsyncBotTask;
-            if (task.useTask) taskManager.setTask(task.taskName, { runner: task.runner, onFail: task.onFail });
-            logger.log(`Added event from file ${file}`, LogTarget.Info, "AsyncTaskManager");
-        } catch (err) {
-            logger.log(`Failed to add event from file ${file}`, LogTarget.Error, "AsyncTaskManager");
-        }
-    }
+    readDirectoryThen<IAsyncBotTask>(join(__dirname, taskDir), (task) => {
+        if (task.useTask) taskManager.setTask(task.taskName, { runner: task.runner, onFail: task.onFail });
+    });
     return taskManager;
 }
-
-export const startupTaskManager = createTaskManager(STARTUP_EVENTS_DIR);
-export const shutdownTaskManager = createTaskManager(SHUTDOWN_EVENTS_DIR);

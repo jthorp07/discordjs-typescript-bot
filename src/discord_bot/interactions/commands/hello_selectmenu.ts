@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
 import { ICommand, ICommandPermission } from "../../../adapter_types/discord_interactions";
 import HelloSelectMenu from "../selectmenus/hello_selectmenu";
 

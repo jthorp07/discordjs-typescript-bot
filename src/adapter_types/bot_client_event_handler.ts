@@ -4,6 +4,14 @@ import {
     GuildAuditLogsEntry, Guild, GuildBan, GuildMember, Collection, Snowflake, GuildMembersChunk,
     GuildScheduledEvent, User, BaseInteraction, Invite, Message, GuildTextBasedChannel, PollAnswer,
     MessageReaction, MessageReactionEventDetails, Presence, Role, Typing, VoiceState, StageInstance,
+    TextChannel,
+    NewsChannel,
+    VoiceChannel,
+    StageChannel,
+    ForumChannel,
+    Sticker,
+    ThreadChannel,
+    ThreadMember,
 } from "discord.js";
 import { PermChecker } from "../bot_systems/permissions/permissions";
 
@@ -77,6 +85,12 @@ type DiscordClientEventHandlerSignature = {
     event: Events.GuildScheduledEventUserAdd | Events.GuildScheduledEventUserRemove,
     handlerFactory: (client: Client, checkPerms?: PermChecker) => (event: GuildScheduledEvent, user: User) => Promise<void>
 } | {
+    event: Events.GuildStickerCreate | Events.GuildStickerDelete,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (sticker: Sticker) => Promise<void>
+} | {
+    event: Events.GuildStickerUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (oldSticker: Sticker, newSticker: Sticker) => Promise<void>
+} | {
     event: Events.InteractionCreate,
     handlerFactory: (client: Client, checkPerms?: PermChecker) => (interaction: BaseInteraction) => Promise<void>
 } | {
@@ -134,6 +148,27 @@ type DiscordClientEventHandlerSignature = {
     event: Events.StageInstanceCreate | Events.StageInstanceDelete,
     handlerFactory: (client: Client, checkPerms?: PermChecker) => (stageInstance: StageInstance) => Promise<void>
 } | {
+    event: Events.StageInstanceUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (oldStageInstance: StageInstance, newStageInstance: StageInstance) => Promise<void>
+} | {
+    event: Events.ThreadCreate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (thread: ThreadChannel, newlyCreated: boolean) => Promise<void>
+} | {
+    event: Events.ThreadDelete,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (thread: ThreadChannel) => Promise<void>
+} | {
+    event: Events.ThreadListSync,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (threads: Collection<Snowflake, ThreadChannel>, guild: Guild) => Promise<void>
+} | {
+    event: Events.ThreadMemberUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (oldMember: ThreadMember, newMember: ThreadMember) => Promise<void>
+} | {
+    event: Events.ThreadMembersUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (addedMembers: Collection<Snowflake, ThreadMember>, removedMembers: Collection<Snowflake, ThreadMember>, thread: ThreadChannel) => Promise<void>
+} | {
+    event: Events.ThreadUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (oldThread: ThreadChannel, newThread: ThreadChannel) => Promise<void>
+} | {} | {} | {
     event: Events.TypingStart,
     handlerFactory: (client: Client, checkPerms?: PermChecker) => (typing: Typing) => Promise<void>
 } | {
@@ -142,5 +177,8 @@ type DiscordClientEventHandlerSignature = {
 } | {
     event: Events.VoiceStateUpdate,
     handlerFactory: (client: Client, checkPerms?: PermChecker) => (oldState: VoiceState, newState: VoiceState) => Promise<void>
+} | {
+    event: Events.WebhooksUpdate,
+    handlerFactory: (client: Client, checkPerms?: PermChecker) => (channel: TextChannel|NewsChannel|VoiceChannel|StageChannel|ForumChannel) => Promise<void> 
 };
 export type IDiscordClientEventHandler = DiscordClientEventHandlerSignature & { useHandler: boolean };

@@ -1,10 +1,10 @@
-import { Client, Events, VoiceState } from "discord.js";
+import { Events } from "discord.js";
 import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event_handler";
 
 const eventHandler: IDiscordClientEventHandler = {
-    event: Events.Warn,
+    event: Events.VoiceStateUpdate,
     handlerFactory(client, checkPerms) {
-        return async (oldState: VoiceState, newState: VoiceState) => {
+        return async (oldState, newState) => {
             // TODO: Implement
             return;
         }

@@ -4,7 +4,7 @@ import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event
 const eventHandler: IDiscordClientEventHandler = {
     event: Events.ShardResume,
     handlerFactory(client, checkPerms) {
-        return async (id: number, eventsReplayed: number) => {
+        return async (id, eventsReplayed) => {
             // TODO: Implement
             return;
         }

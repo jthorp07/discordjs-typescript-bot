@@ -1,6 +1,6 @@
 import { readdirSync } from "fs";
 import { join } from "path";
-import { AnySelectMenuInteraction, Collection, Events, Interaction } from "discord.js";
+import { AnySelectMenuInteraction, Collection, Events } from "discord.js";
 import { ISelectMenu } from "../../adapter_types/discord_interactions";
 import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event_handler";
 import { instance as logger } from "../../bot_systems/logger/logger";
@@ -19,7 +19,7 @@ const eventHandler: IDiscordClientEventHandler = {
 
             }
         }).call(this);
-        if (files.length == 0) return async (interaction: Interaction) => {
+        if (files.length == 0) return async (interaction) => {
             if (!interaction.isAnySelectMenu()) return;
             await interaction.reply({ content: `Something went wrong, and select menus cannot be handled at the moment. Please report this to a staff member.` });
         }
@@ -35,7 +35,7 @@ const eventHandler: IDiscordClientEventHandler = {
                 continue;
             }
         };
-        return async (interaction: Interaction) => {
+        return async (interaction) => {
             if (!interaction.isAnySelectMenu()) return
             let cmdInteraction: AnySelectMenuInteraction = interaction;
             let idArgs = cmdInteraction.customId.split(':');

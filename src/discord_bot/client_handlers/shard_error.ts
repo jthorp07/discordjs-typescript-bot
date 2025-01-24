@@ -4,7 +4,7 @@ import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event
 const eventHandler: IDiscordClientEventHandler = {
     event: Events.ShardError,
     handlerFactory(client, checkPerms) {
-        return async (error: Error, shardId: number) => {
+        return async (error, shardId) => {
             // TODO: Implement
             return;
         }

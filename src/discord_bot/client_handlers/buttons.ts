@@ -1,6 +1,6 @@
 import { readdirSync } from "fs";
 import { join } from "path";
-import { Collection, Events, Interaction } from "discord.js";
+import { Collection, Events } from "discord.js";
 import { IButton } from "../../adapter_types/discord_interactions";
 import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event_handler";
 import { instance as logger } from "../../bot_systems/logger/logger";
@@ -10,7 +10,7 @@ const path = join(__dirname, "../../buttons")
 const eventHandler: IDiscordClientEventHandler = {
 
     event: Events.InteractionCreate,
-    handlerFactory: (ignored, permCheck) => {
+    handlerFactory(client, checkPerms?) {
 
         const buttons = new Collection<String, IButton>();
         const files = (() => {
@@ -20,7 +20,7 @@ const eventHandler: IDiscordClientEventHandler = {
                 return [];
             }
         }).call(this);
-        if (files.length == 0) return async (interaction: Interaction) => {
+        if (files.length == 0) return async (interaction) => {
             if (!interaction.isButton()) return;
             await interaction.reply({ content: `Something went wrong, and buttons cannot be handled at the moment. Please report this to a staff member.` });
         }
@@ -36,7 +36,7 @@ const eventHandler: IDiscordClientEventHandler = {
                 continue;
             }
         };
-        return async (interaction: Interaction) => {
+        return async (interaction) => {
             if (!interaction.isButton()) return
             let idArgs = interaction.customId.split(':');
             if (!idArgs || idArgs.length === 0) {
@@ -50,14 +50,13 @@ const eventHandler: IDiscordClientEventHandler = {
                 return;
             }
 
-            if (permCheck) {
-                let authenticated = await permCheck(cmd.permissions, interaction);
+            if (checkPerms) {
+                let authenticated = await checkPerms(cmd.permissions, interaction);
                 if (!authenticated) {
                     await interaction.editReply({ content: "You do not have the right permissions to use this selectmenu!" });
                     return;
                 }
             }
-
             await cmd.execute(interaction, idArgs);
         }
     },

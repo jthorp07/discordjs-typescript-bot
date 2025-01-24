@@ -4,7 +4,7 @@ import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event
 const eventHandler: IDiscordClientEventHandler = {
     event: Events.MessageCreate,
     handlerFactory(client, checkPerms) {
-        return async (message: Message) => {
+        return async (message) => {
             // TODO: Implement
             return;
         }

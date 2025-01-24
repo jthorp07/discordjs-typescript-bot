@@ -19,7 +19,7 @@ const eventHandler: IDiscordClientEventHandler = {
 
             }
         }).call(this);
-        if (files.length == 0) return async (interaction: Interaction) => {
+        if (files.length == 0) return async (interaction) => {
             if (!interaction.isChatInputCommand()) return;
             await interaction.reply({ content: `Something went wrong, and slash commands cannot be handled at the moment. Please report this to a staff member.` });
         }
@@ -35,7 +35,7 @@ const eventHandler: IDiscordClientEventHandler = {
                 continue;
             }
         };
-        return async (interaction: Interaction) => {
+        return async (interaction) => {
             if (!interaction.isChatInputCommand()) return
             let cmdInteraction: ChatInputCommandInteraction = interaction;
             let cmd: ICommand | undefined = slashCommands?.get(cmdInteraction.commandName);

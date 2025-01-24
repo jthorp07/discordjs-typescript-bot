@@ -4,7 +4,7 @@ import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event
 const eventHandler: IDiscordClientEventHandler = {
     event: Events.ShardDisconnect,
     handlerFactory(client, checkPerms) {
-        return async (event: CloseEvent, id: number) => {
+        return async (event, id) => {
             // TODO: Implement
             return;
         }

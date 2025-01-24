@@ -1,10 +1,10 @@
-import { Events, Sticker } from "discord.js";
+import { Events } from "discord.js";
 import { IDiscordClientEventHandler } from "../../adapter_types/bot_client_event_handler";
 
 const eventHandler: IDiscordClientEventHandler = {
     event: Events.GuildStickerUpdate,
     handlerFactory(client, checkPerms) {
-        return async (oldSticker: Sticker, newSticker: Sticker) => {
+        return async (oldSticker, newSticker) => {
             // TODO: Implement
             return;
         }

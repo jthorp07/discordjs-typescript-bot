@@ -13,7 +13,7 @@ import {
     ThreadChannel,
     ThreadMember,
 } from "discord.js";
-import { PermChecker } from "../bot_systems/permissions/permissions";
+import { PermChecker } from "@/bot_systems/permissions/permissions";
 
 type DiscordClientEventHandlerSignature = {
     event: Events.ApplicationCommandPermissionsUpdate,
